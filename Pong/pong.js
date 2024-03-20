@@ -1,30 +1,42 @@
-let player_y1 = 500;
-let player_y2 = 500;
+let player_y1 = canvas.height / 2 - 100;
+let player_y2 = canvas.height / 2 - 100;
 let player_speed_y1 = 0;
 let player_speed_y2 = 0;
 let ball_x = canvas.width / 2;
 let ball_y = canvas.height / 2;
 let ball_length = 30;
-let ball_speed_x = 400;
-if (Math.floor(Math.random() * 2))
-	ball_speed_x *= -1;
-let ball_speed_y = Math.floor(Math.random() * (400 - -400) - 400);
+let ball_speed = 400;
+let ball_angle = ((Math.random() < 0.5 ? 1 : -1) == true) ? (Math.PI - ((Math.random() * (225 * Math.PI / 180 - 135 * Math.PI / 180)) + 135 * Math.PI / 180)) : ((Math.random() * (225 * Math.PI / 180 - 135 * Math.PI / 180)) + 135 * Math.PI / 180);
+var score = [0, 0];
 let first_hit = 0;
 let last_frame;
 let wait_frames = 0;
 
+function bounceAngle(ball_angle, ball_x, ball_y, ball_length, player_y1, player_y2) {
+	let new_angle;
+	let player;
+	if (ball_x <= 50)
+		player = player_y1;
+	else if (ball_x >= 1130)
+		player = player_y2;
+	let relative_position = (ball_y + ball_length / 2) - player + 100;
+	let amount = relative_position * 75 / 100;
+
+	new_angle = Math.PI - (amount * Math.PI / 180);
+
+	console.log(relative_position + " " + amount + " " + new_angle);
+	return new_angle;
+}
+
 function updatePos(time_diff) {
-	console.log("Init" + ball_speed_y);
 	wait_frames--;
 	if (wait_frames == 1) {
 		player_speed_y1 = 0;
 		player_speed_y2 = 0;
 		ball_x = canvas.width / 2;
 		ball_y = canvas.height / 2;
-		ball_speed_x = -400;
-		if (Math.floor(Math.random() * 2))
-			ball_speed_x *= -1;
-		ball_speed_y = Math.floor(Math.random() * (400 - -400) - 400);
+		ball_speed = 400;
+		ball_angle = ((Math.random() < 0.5 ? 1 : -1) == true) ? (Math.PI - ((Math.random() * (225 * Math.PI / 180 - 135 * Math.PI / 180)) + 135 * Math.PI / 180)) : ((Math.random() * (225 * Math.PI / 180 - 135 * Math.PI / 180)) + 135 * Math.PI / 180);
 		first_hit = 0;
 	}
 
@@ -35,33 +47,41 @@ function updatePos(time_diff) {
 	if (player_y2 < 10 || player_y2 > 955)
 		player_y2 -= player_speed_y2 * time_diff;
 
-	ball_x += ball_speed_x * time_diff;
-	ball_y += ball_speed_y * time_diff;
+	ball_x += ball_speed * Math.cos(ball_angle) * time_diff;
+	ball_y += ball_speed * Math.sin(ball_angle) * time_diff;
 	if (ball_y < 0 || ball_y > canvas.height - ball_length)
-		ball_speed_y *= -1;
-	// if ((ball_x  + ball_length / 2 >= 20 && ball_x + ball_length / 2 <= 50) && (ball_y + ball_length >= player_y1 && ball_y + ball_length <= player_y1 + 20)) {
-	// 	ball_speed_x *= -1;
-	// }
-	if ((ball_y >= player_y1 - 25 && ball_y <= player_y1 + 200 && (ball_x >= 30 && ball_x <= 50) && ball_speed_x < 0) || (ball_y >= player_y2 - 25 && ball_y <= player_y2 + 200 && (ball_x + ball_length >= 1130 && ball_x + ball_length <= 1150) && ball_speed_x > 0)) {
-		ball_speed_x *= -1;
-		console.log("Before" + ball_speed_y);
-		ball_speed_y += Math.floor(Math.random() * (300 + 300) - 300);
-		console.log("After" + ball_speed_y);
-		// console.log((Math.random() * (100 + 100) - 100) / 100);
+		ball_angle = 2 * Math.PI - ball_angle;
+	if ((ball_y >= player_y1 - 25 && ball_y <= player_y1 + 200 && ball_x <= 50) || (ball_y >= player_y2 - 25 && ball_y <= player_y2 + 200 && ball_x + ball_length >= 1130)) {
+		// ball_angle = Math.PI - ball_angle;
+		ball_angle = bounceAngle(ball_angle, ball_x, ball_y, ball_length, player_y1, player_y2);
 		if (!first_hit) {
 			first_hit = 1;
-			ball_speed_x *= 2;
+			ball_speed *= 2;
 		}
 	}
-	if (ball_x < -ball_length && ball_x > -200 || ball_x > canvas.width && ball_x < canvas.width + 200)
+	if (ball_x < -ball_length && wait_frames < 0) {
+		score[1]++;
 		wait_frames = 25;
+	}
+	else if (ball_x > canvas.width && wait_frames < 0) {
+		score[0]++;
+		wait_frames = 25;
+	}
 }
 
 function draw() {
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
-  ctx.fillStyle = "rgb(255, 255, 255)";
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "rgb(70, 70, 70)";
+	for (let i = 15; i < canvas.height - 30; i += 50) {
+		ctx.fillRect(canvas.width / 2, i, 10, 30);
+	}
+	ctx.font = "100px Arial";
+	ctx.textAlign = "center";
+	ctx.fillText(score[0].toString(), canvas.width / 3, 100);
+	ctx.fillText(score[1].toString(), canvas.width - canvas.width / 3, 100);
+  ctx.fillStyle = "rgb(255, 255, 255)";
   ctx.fillRect(20, player_y1, 30, 200);
   ctx.fillRect(1130, player_y2, 30, 200);
 	ctx.beginPath();
