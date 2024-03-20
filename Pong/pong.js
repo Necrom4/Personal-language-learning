@@ -13,23 +13,21 @@ let last_frame;
 let wait_frames = 0;
 
 function bounceAngle(ball_angle, ball_x, ball_y, ball_length, player_y1, player_y2) {
-	let new_angle;
 	let player;
-	if (ball_x <= 50)
+	if (ball_angle > Math.PI / 2 && ball_angle < Math.PI + Math.PI / 2)
 		player = player_y1;
-	else if (ball_x >= 1130)
+	else if (ball_angle < Math.PI / 2 || ball_angle > Math.PI + Math.PI / 2)
 		player = player_y2;
-	let relative_position = (ball_y + ball_length / 2) - player + 100;
-	let amount = relative_position * 75 / 100;
+	let relative_position = (ball_y + ball_length / 2) - (player + 100);
 
-	new_angle = Math.PI - (amount * Math.PI / 180);
-
-	console.log(relative_position + " " + amount + " " + new_angle);
-	return new_angle;
+	if (player == player_y1)
+		return (2 * Math.PI - ((360 - relative_position * 65 / 100) * Math.PI / 180));
+	else if (player == player_y2)
+		return (2 * Math.PI - ((180 + relative_position * 65 / 100) * Math.PI / 180));
 }
 
 function updatePos(time_diff) {
-	wait_frames--;
+	wait_frames--
 	if (wait_frames == 1) {
 		player_speed_y1 = 0;
 		player_speed_y2 = 0;
@@ -51,7 +49,7 @@ function updatePos(time_diff) {
 	ball_y += ball_speed * Math.sin(ball_angle) * time_diff;
 	if (ball_y < 0 || ball_y > canvas.height - ball_length)
 		ball_angle = 2 * Math.PI - ball_angle;
-	if ((ball_y >= player_y1 - 25 && ball_y <= player_y1 + 200 && ball_x <= 50) || (ball_y >= player_y2 - 25 && ball_y <= player_y2 + 200 && ball_x + ball_length >= 1130)) {
+	if ((ball_y >= player_y1 - 25 && ball_y <= player_y1 + 200 && ball_x <= 50 && ball_angle > Math.PI / 2 && ball_angle < Math.PI * 1.5) || (ball_y >= player_y2 - 25 && ball_y <= player_y2 + 200 && ball_x + ball_length>= 1130 && (ball_angle < Math.PI / 2 || ball_angle > Math.PI * 1.5))) {
 		// ball_angle = Math.PI - ball_angle;
 		ball_angle = bounceAngle(ball_angle, ball_x, ball_y, ball_length, player_y1, player_y2);
 		if (!first_hit) {
