@@ -44,6 +44,7 @@ function updatePos(time_diff) {
 		paddle_bounces = 0;
 		speed_acc = 3;
 		frames = 0;
+		aiMove();
 	}
 
   paddle_y1 += paddle_speed_y1 * time_diff;
@@ -59,6 +60,7 @@ function updatePos(time_diff) {
 		ball_angle = 2 * Math.PI - ball_angle;
 	if ((ball_y >= paddle_y1 - 25 && ball_y <= paddle_y1 + 200 && ball_x <= 50 && ball_x >= 20 && ball_angle > Math.PI / 2 && ball_angle < Math.PI * 1.5) || (ball_y >= paddle_y2 - 25 && ball_y <= paddle_y2 + 200 && ball_x + ball_length >= 1130 && ball_x <= 1160 && (ball_angle < Math.PI / 2 || ball_angle > Math.PI * 1.5))) {
 		ball_angle = bounceAngle(ball_angle, ball_x, ball_y, ball_length, paddle_y1, paddle_y2);
+		aiMove();
 		if (Math.floor(Math.random() * speed_acc) == 1)
 			ball_speed *= 1.1;
 		if (ball_speed > 1500)
@@ -138,14 +140,27 @@ function menu() {
 
 function aiMove() {
 	if (!ai_activated)
-		return;
-	if (ball_y + ball_length / 2 > paddle_y1 + 200)
-		paddle_speed_y1 = 1000;
-	else if (ball_y + ball_length / 2 < paddle_y1)
-		paddle_speed_y1 = -1000;
-	else
-		paddle_speed_y1 = 0;
-
+		return
+	let copy_ball_x = ball_x;
+	let copy_ball_y = ball_y;
+	let i = 1;
+	while (ball_angle > Math.PI / 2 && ball_angle < Math.PI * 1.5 && ball_x > 50 && ball_y > 0 && ball_y + ball_length < canvas.height) {
+		ball_x += Math.cos(ball_angle) * i;
+		ball_y += Math.sin(ball_angle) * i;
+		i++;
+	}
+	if (ball_x <= 50)
+		console.log("X");
+	else if (ball_y <= 0 || ball_y >= canvas.height)
+		console.log("Y");
+	ball_x = copy_ball_x;
+	ball_y = copy_ball_y;
+	// if (ball_y + ball_length / 2 > paddle_y1 + 200)
+	// 	paddle_speed_y1 = 1000;
+	// else if (ball_y + ball_length / 2 < paddle_y1)
+	// 	paddle_speed_y1 = -1000;
+	// else
+	// 	paddle_speed_y1 = 0;
 }
 
 function draw() {
@@ -182,7 +197,7 @@ function loop(current_frame) {
   const time_diff = (current_frame - last_frame) / 1000 || 0;
   last_frame = current_frame;
 
-	aiMove();
+	// aiMove();
   updatePos(time_diff);
   draw();
 
@@ -230,4 +245,3 @@ document.addEventListener("keyup", (event) => {
 });
 
 menu();
-// requestAnimationFrame(loop);
