@@ -1,25 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Black Canvas</title>
-	</head>
-	<style>
-		body {
-			margin: 0;
-			padding: 0;
-		}
-
-		#canvas {
-			position: absolute;
-			top: 50px;
-			left: 50px;
-			background-color: black;
-		}
-	</style>
-	<body>
-		<canvas id="canvas" width="1180" height="1160"></canvas>
-		<script src="pong.js"></script>
-	</body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>(Ping) Pong</title>
+  <link rel="icon" type="image/x-icon" href="./favicon.ico">
+</head>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  #canvas {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    background-color: black;
+  }
+  .menu {
+    position: absolute;
+    top: 50px;
+    left: 1290px;
+		display: flex;
+		flex-direction: column;
+  }
+  .menu-item {
+    width: 200px;
+    height: 100px;
+    background-color: #555;
+    color: white;
+		font-family: "Arial";
+		font-size: 20px;
+    text-align: center;
+    line-height: 100px;
+    display: inline-block;
+    margin: 0 10px 20px 0;
+    cursor: pointer;
+  }
+  .menu-item:hover {
+    background-color: #777;
+  }
+</style>
+<body>
+  <canvas id="canvas" width="1180" height="1160"></canvas>
+  <script src="pong.js"></script>
+  <!-- <div class="menu"> -->
+		<!-- <div class="menu-item" onclick="launchScript('pong_2P.js')">Player V Player</div> -->
+		<!-- <div class="menu-item" onclick="launchScript('pong_1P.js')">CPU V Player</div> -->
+	<!-- </div> -->
+	<!-- <script> -->
+	<!-- 	function launchScript(scriptName) { -->
+	<!-- 		var script = document.createElement('script'); -->
+	<!-- 		script.src = scriptName; -->
+	<!-- 		document.body.appendChild(script); -->
+	<!-- 	} -->
+	<!-- </script> -->
+</body>
 </html>
