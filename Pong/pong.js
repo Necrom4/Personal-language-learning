@@ -57,9 +57,10 @@ function updatePos(time_diff) {
 
 	ball_x += ball_speed * Math.cos(ball_angle) * time_diff;
 	ball_y += ball_speed * Math.sin(ball_angle) * time_diff;
+	// if ((ball_y < 0 && ball_angle > Math.PI || ball_angle < 0) || (ball_y + ball_length > canvas.height && ball_angle < Math.PI && ball_angle > 0))
 	if (ball_y < 0 || ball_y > canvas.height - ball_length)
 		ball_angle = 2 * Math.PI - ball_angle;
-	if ((ball_y >= paddle_y1 - 25 && ball_y <= paddle_y1 + 200 && ball_x <= 50 && ball_x >= 20 && ball_angle > Math.PI / 2 && ball_angle < Math.PI * 1.5) || (ball_y >= paddle_y2 - 25 && ball_y <= paddle_y2 + 200 && ball_x + ball_length >= 1130 && ball_x <= 1160 && (ball_angle < Math.PI / 2 || ball_angle > Math.PI * 1.5))) {
+	if ((ball_y >= paddle_y1 - ball_length && ball_y <= paddle_y1 + 200 && ball_x <= 50 && ball_x >= 20 && ball_angle > Math.PI / 2 && ball_angle < Math.PI * 1.5) || (ball_y >= paddle_y2 - 25 && ball_y <= paddle_y2 + 200 && ball_x + ball_length >= 1130 && ball_x <= 1160 && (ball_angle < Math.PI / 2 || ball_angle > Math.PI * 1.5))) {
 		ball_angle = bounceAngle(ball_angle, ball_x, ball_y, ball_length, paddle_y1, paddle_y2);
 		if (Math.floor(Math.random() * speed_acc) == 1)
 			ball_speed *= 1.1;
@@ -146,13 +147,14 @@ function aiMove() {
 	let copy_ball_angle = ball_angle;
 	for (let i = 1; ball_x > 50; i++) {
 		if (ball_y < 0 || ball_y > canvas.height - ball_length)
+		// if ((ball_y < 0 && ball_angle > Math.PI || ball_angle < 0) || (ball_y + ball_length > canvas.height && ball_angle < Math.PI && ball_angle > 0))
 			ball_angle = 2 * Math.PI - ball_angle;
 		ball_x += Math.cos(ball_angle) * i;
 		ball_y += Math.sin(ball_angle) * i;
 	}
-	if (ball_y + ball_length / 2 > paddle_y1 + 200)
+	if (ball_y > paddle_y1 + 200)
 		paddle_speed_y1 = 1000;
-	else if (ball_y + ball_length / 2 < paddle_y1)
+	else if (ball_y + ball_length < paddle_y1)
 		paddle_speed_y1 = -1000;
 	else
 		paddle_speed_y1 = 0;
