@@ -121,7 +121,41 @@
 # print "#{gets.chomp[0..2] * gets.chomp.to_i}"
 
 # 15 #
-print "String: "; puts gets.chomp[-1] << $_[1...-2] << $_[0]
+# print "String: "; puts gets.chomp[-1] << $_[1...-2] << $_[0]
 # string = gets.chomp
 # new_string = string[-1] << string[1...-1] << string[0]
 # puts new_string
+
+# 17 #
+# print "N: "; puts gets.chomp.to_i > 33 ? (($_.to_i - 33) * 2).abs : ($_.to_i - 33).abs
+
+# 40 #
+# print "String: "; gets.chomp.each_char { |char| print char unless $_.index(char).odd? }; puts
+
+# 41 #
+# print "Array: "; puts gets.chomp.split.map(&:to_i).count { |i| i == 5 }
+
+# 55 #
+# print "Integers: "; puts (numbers = gets.chomp.split.map(&:to_i))[0] == numbers[1] ? 0 : numbers[0] % 5 == numbers[1] % 5 ? numbers.min : numbers.max
+
+# RUBY ARRAY EXERICSES #
+
+# 1 #
+# original_array = ["Red", "Blue", "Green"]
+# print "Color: "
+# color = gets.chomp
+# puts "Check if '#{color}' in color array!"
+# puts original_array.map(&:downcase).include?(color.downcase)
+
+# 48 #
+# original_array = ["abcde", "abdf", "adeab", "abdgeee", "bdefa", "abc", "ab", "a", "bacdef"]
+# puts "Original array: "
+# print original_array
+# puts
+# puts "Sorted array of strings by length: "
+# print original_array.sort_by(&:length)
+
+# RUBY STRING EXERICSES #
+
+# 1 #
+# puts "<i> he </i>"

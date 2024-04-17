@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  django:
+    container_name: django
+    build: ./
+    volumes:
+    - django:/app
+    ports:
+    - "8000:8000"
+    tty: true
+
+volumes:
+  django:
+    name: django
+    driver: local
+    driver_opts:
+      device: /Users/dferreir/42/Training/Django_Project/app
+      type: none
+      o: bind
